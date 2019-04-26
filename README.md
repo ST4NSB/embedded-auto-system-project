@@ -1,5 +1,4 @@
-# Embedded System Project -
-# Automotive Main-Board System Simulation  
+# Embedded System - Automotive Main-Board System Simulation  
 HCS08 Family,
 MC9S08AW60 Series
 
