@@ -15,7 +15,7 @@ struct package {
 ```
 
 * ```pack.size``` is the size of incoming data values (```pack.data[size]```)   
-* ```pack.checksum``` is calculated as the sum of the hex values of ```pack.ID```, ```pack.size```, ```pack.data[..]```
+* ```pack.checksum``` is calculated as the sum of ```pack.ID```, ```pack.size```, ```pack.data[..]``` hex values
 
 ## Instructions
 
