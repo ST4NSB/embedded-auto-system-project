@@ -108,7 +108,7 @@ interrupt 11 void TPM1_timerInt()
     
     if(numarare_timer == 0) {
     	if(semnalizare_stanga == 1) 
-    		PTFD |= 0x80;
+    	    PTFD |= 0x80;
     	if(semnalizare_dreapta == 1)
     	    PTFD |= 0x01;
     }
