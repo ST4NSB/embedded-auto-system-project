@@ -40,5 +40,6 @@ struct package {
 Pornire LED stanga (valori hex): ```01 00 01``` -> 01 ```pack.ID```, 00 ```pack.size```, 01 ```pack.checksum```  
 Pornire LED-uri avarie (valori hex): ```05 00 05``` -> 05 ```pack.ID```, 00 ```pack.size```, 05 ```pack.checksum```  
 Oprire LED-uri dreapta (valori hex): ```04 00 04``` -> 04 ```pack.ID```, 00 ```pack.size```, 04 ```pack.checksum```  
+
 (in cazurile cand se lucreaza cu LED-ul, acesta va fi aprins 60% dintr-o secunda si va fi stins in rest)
 
