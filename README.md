@@ -23,7 +23,8 @@ struct package {
 * **SPD** Pornire dreapta  
 * **SOD** Oprire dreapta  
 * **SPA** Pornire avarie  
-* **SOA** Oprire avarie 
+* **SOA** Oprire avarie  
+(in aceste cazuri, LED-ul va fi aprins 60% dintr-o secunda si va fi stins in rest)
 
 ## Exemple
 ### Definitii ID comenzi
