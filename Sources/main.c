@@ -1,13 +1,12 @@
 #include <hidef.h> /* for EnableInterrupts macro */
 #include "derivative.h" /* include peripheral declarations */
 #include "comenzi.h"
+#include "stari.h"
 
 #define P_ID 0
 #define P_SIZE 1
 #define P_DATA 2
 #define P_CHECKSUM 3
-
-int cmp_address = 0, data_adress = 0;
 
 struct package {
     unsigned char ID;
@@ -15,6 +14,33 @@ struct package {
     unsigned char data[5];
     unsigned char checksum;
 }pack;
+
+struct stransition {
+	unsigned char state;
+	unsigned char cmd;
+	unsigned char new_state;
+	unsigned char output[2];
+};
+
+struct stransition strans[14] = {
+	{DEFAULT, SPS, SS, 1, 0},
+	{DEFAULT, SPA, AV, 1, 1},			
+	{DEFAULT, SPD, SD, 0, 1},
+	{SS, SOS, DEFAULT, 0, 0},
+	{SS, SPA, SSAV, 1, 1},
+	{SD, SOD, DEFAULT, 0, 0},
+	{SD, SPA, SDAV, 0, 1},
+	{AV, SPS, SSAV, 1, 1},
+	{AV, SOA, DEFAULT, 0, 0},
+	{AV, SPD, SDAV, 1, 1},
+	{SSAV, SOA, SS, 1, 0},
+	{SSAV, SOS, AV, 1, 1},
+	{SDAV, SOA, SD, 0, 1},
+	{SDAV, SOD, AV, 1, 1}
+};
+
+unsigned char cmp_address = 0, data_adress = 0; // fost int
+unsigned char current_state = DEFAULT; // fost int
 
 unsigned char caracter_receptionat;        // caracterul receptionat pe intrerupere   
 unsigned char numarare_timer;
@@ -28,7 +54,7 @@ unsigned char validare_stare_automata = 0;    // validare tramsnmitere automata 
 
 
 void Init(){
-      //configurare procesor
+    //configurare procesor
     SOPT  = 0x00;     /* Disable COP    */
     ICGC2  = 0X00;       // Set up ICG control register 2
     ICGC1  = 0X78;       // Set up ICG for FEE, 4MHz external crystal, busclk = 8MHz
@@ -51,6 +77,18 @@ void Init(){
     SCI1BD = 8000000/16/19200;
     SCI1C1 = 0;
     SCI1C2 = 0x2C; //validare transmisie prin interogare si receptie prin intrerupere
+}
+
+void cautare_comanda(unsigned char comanda) {
+	int i;
+	for(i = 0; i < (sizeof(strans)/sizeof(strans[0])); i++) {
+		if((strans[i].state == current_state) && (strans[i].cmd == comanda)) {
+			current_state = strans[i].new_state;
+			semnalizare_stanga = strans[i].output[0];
+			semnalizare_dreapta = strans[i].output[1];
+			break;
+		}
+	}
 }
 
  
@@ -108,7 +146,7 @@ interrupt 11 void TPM1_timerInt()
     
     if(numarare_timer == 0) {
     	if(semnalizare_stanga == 1) 
-    		PTFD |= 0x80;
+    	    PTFD |= 0x80;
     	if(semnalizare_dreapta == 1)
     	    PTFD |= 0x01;
     }
@@ -127,6 +165,9 @@ interrupt 11 void TPM1_timerInt()
 
 void tratare_seriala() {
     caracter_receptionat = pack.ID;
+    cautare_comanda(caracter_receptionat);
+    
+    /*
     switch(caracter_receptionat) {
       case SPS: semnalizare_stanga = 1; break;
       case SOS: semnalizare_stanga = 0; break;
@@ -138,7 +179,8 @@ void tratare_seriala() {
       case SOA: semnalizare_stanga = 0;
       	  	  	semnalizare_dreapta = 0;
       	  	  	break;
-    /*
+     */
+     /*
       case '0':
       case '1':
       case '2':
@@ -168,8 +210,7 @@ void tratare_seriala() {
                        SCI1D = 'L';
                    else
                        SCI1D = 'A';
-               break;    
-      */         
+               break;         
       default:  
             if (validare_ecou) {
               
@@ -177,6 +218,7 @@ void tratare_seriala() {
                SCI1D = caracter_receptionat;
             }
      }
+     */
  }
 
 void tratare_timer()

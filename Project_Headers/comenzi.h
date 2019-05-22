@@ -1,10 +1,3 @@
-/*
- * comenzi.h
- *
- *  Created on: May 15, 2019
- *      Author: ESD
- */
-
 #ifndef COMENZI_H_
 #define COMENZI_H_
 
@@ -14,6 +7,5 @@
 #define SOD 4
 #define SPA 5
 #define SOA 6
-
 
 #endif /* COMENZI_H_ */
