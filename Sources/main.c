@@ -9,10 +9,10 @@
 #define P_CHECKSUM 3
 
 struct package {
-    unsigned char ID;
-    unsigned char size;
-    unsigned char data[5];
-    unsigned char checksum;
+	unsigned char ID;
+	unsigned char size;
+	unsigned char data[5];
+	unsigned char checksum;
 }pack;
 
 struct stransition {
