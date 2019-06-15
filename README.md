@@ -157,6 +157,6 @@ Interogare parametrii:  ```10 00 10``` -> 10 ```pack.ID```, 00 ```pack.size```, 
 (in cazurile cand se lucreaza cu semnalizarile, LED-urile vor fi aprinse 60% dintr-o secunda si vor fi stinse in rest)
 
 ### Serial API
-In loc sa trimitem mereu manual parametrii, folosim comenzile deja setate in interfata grafica
+In loc sa trimitem mereu manual parametrii, folosim interfata grafica pt. a trimite comenzi
 ![serial_api](images/serial_api.png)
 
