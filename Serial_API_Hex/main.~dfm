@@ -1,8 +1,8 @@
 object FMain: TFMain
   Left = 210
   Top = 192
-  Width = 1011
-  Height = 566
+  Width = 1053
+  Height = 574
   Caption = 'FMain'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -94,8 +94,8 @@ object FMain: TFMain
     Caption = 'Hexa'
   end
   object Semnalizare: TLabel
-    Left = 776
-    Top = 104
+    Left = 800
+    Top = 48
     Width = 88
     Height = 20
     Caption = 'Semnalizare'
@@ -107,8 +107,8 @@ object FMain: TFMain
     ParentFont = False
   end
   object Acceleratie: TLabel
-    Left = 776
-    Top = 256
+    Left = 800
+    Top = 200
     Width = 79
     Height = 20
     Caption = 'Acceleratie'
@@ -120,8 +120,8 @@ object FMain: TFMain
     ParentFont = False
   end
   object Parametrii: TLabel
-    Left = 776
-    Top = 368
+    Left = 800
+    Top = 424
     Width = 71
     Height = 20
     Caption = 'Parametrii'
@@ -133,10 +133,36 @@ object FMain: TFMain
     ParentFont = False
   end
   object Shape3: TShape
-    Left = 736
-    Top = 72
+    Left = 744
+    Top = 32
     Width = 1
-    Height = 401
+    Height = 465
+  end
+  object accinfo: TLabel
+    Left = 800
+    Top = 232
+    Width = 167
+    Height = 13
+    Caption = 'Introduceti o valoare pt. acceleratie'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 800
+    Top = 248
+    Width = 56
+    Height = 13
+    Caption = 'intre (0-255)'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
   end
   object btnOpenCOM: TButton
     Left = 160
@@ -312,8 +338,8 @@ object FMain: TFMain
     OnClick = btnStergereTClick
   end
   object SPSbttn: TButton
-    Left = 776
-    Top = 136
+    Left = 800
+    Top = 80
     Width = 75
     Height = 25
     Caption = 'SPS'
@@ -321,8 +347,8 @@ object FMain: TFMain
     OnClick = SPSbttnClick
   end
   object SOSbttn: TButton
-    Left = 864
-    Top = 136
+    Left = 888
+    Top = 80
     Width = 75
     Height = 25
     Caption = 'SOS'
@@ -330,8 +356,8 @@ object FMain: TFMain
     OnClick = SOSbttnClick
   end
   object SPDbttn: TButton
-    Left = 776
-    Top = 176
+    Left = 800
+    Top = 120
     Width = 75
     Height = 25
     Caption = 'SPD'
@@ -339,8 +365,8 @@ object FMain: TFMain
     OnClick = SPDbttnClick
   end
   object SODbttn: TButton
-    Left = 864
-    Top = 176
+    Left = 888
+    Top = 120
     Width = 75
     Height = 25
     Caption = 'SOD'
@@ -348,8 +374,8 @@ object FMain: TFMain
     OnClick = SODbttnClick
   end
   object SPAbttn: TButton
-    Left = 776
-    Top = 216
+    Left = 800
+    Top = 160
     Width = 75
     Height = 25
     Caption = 'SPA'
@@ -357,8 +383,8 @@ object FMain: TFMain
     OnClick = SPAbttnClick
   end
   object SOAbttn: TButton
-    Left = 864
-    Top = 216
+    Left = 888
+    Top = 160
     Width = 75
     Height = 25
     Caption = 'SOA'
@@ -366,8 +392,8 @@ object FMain: TFMain
     OnClick = SOAbttnClick
   end
   object ACAbttn: TButton
-    Left = 776
-    Top = 328
+    Left = 800
+    Top = 384
     Width = 75
     Height = 25
     Caption = 'ACA'
@@ -375,8 +401,8 @@ object FMain: TFMain
     OnClick = ACAbttnClick
   end
   object ASAbttn: TButton
-    Left = 864
-    Top = 328
+    Left = 888
+    Top = 384
     Width = 75
     Height = 25
     Caption = 'ASA'
@@ -384,8 +410,8 @@ object FMain: TFMain
     OnClick = ASAbttnClick
   end
   object PIPbttn: TButton
-    Left = 776
-    Top = 400
+    Left = 800
+    Top = 456
     Width = 75
     Height = 25
     Caption = 'PIP'
@@ -393,12 +419,29 @@ object FMain: TFMain
     OnClick = PIPbttnClick
   end
   object AIAbttn: TBitBtn
-    Left = 776
-    Top = 288
+    Left = 800
+    Top = 344
     Width = 161
     Height = 25
-    Caption = 'AIA with random value'
+    Caption = 'AIA (valoare random)'
     TabOrder = 25
     OnClick = AIAbttnClick
+  end
+  object AIAtxtbox: TEdit
+    Left = 800
+    Top = 272
+    Width = 161
+    Height = 21
+    TabOrder = 26
+    Text = '0'
+  end
+  object AIAvaluebttn: TButton
+    Left = 800
+    Top = 304
+    Width = 75
+    Height = 25
+    Caption = 'AIA'
+    TabOrder = 27
+    OnClick = AIAvaluebttnClick
   end
 end

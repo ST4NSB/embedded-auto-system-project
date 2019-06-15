@@ -232,10 +232,22 @@ void __fastcall TFMain::SOAbttnClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TFMain::AIAvaluebttnClick(TObject *Sender)
+{
+        unsigned char value = AIAtxtbox->Text.ToInt();
+        buffAIA[0] = AIA;
+        buffAIA[1] = 01;
+        buffAIA[2] = value;
+        unsigned char sum = buffAIA[0] + buffAIA[1] + buffAIA[2];
+        buffAIA[3] = sum;
+        TrimitePachet(buffAIA, 4);
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TFMain::AIAbttnClick(TObject *Sender)
 {
         Randomize();
-        unsigned char rand = (RandSeed % 255) + 1; // interval 1-255
+        unsigned char rand = (RandSeed % 256); // interval 0-255
         buffAIA[0] = AIA;
         buffAIA[1] = 01;
         buffAIA[2] = rand;
@@ -262,3 +274,5 @@ void __fastcall TFMain::PIPbttnClick(TObject *Sender)
         TrimitePachet(buffPIP, 3);
 }
 //---------------------------------------------------------------------------
+
+

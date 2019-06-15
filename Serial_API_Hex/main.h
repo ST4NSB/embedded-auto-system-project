@@ -53,6 +53,10 @@ __published:	// IDE-managed Components
         TLabel *Parametrii;
         TShape *Shape3;
         TBitBtn *AIAbttn;
+        TLabel *accinfo;
+        TEdit *AIAtxtbox;
+        TButton *AIAvaluebttn;
+        TLabel *accinfo2;
         void __fastcall btnOpenCOMClick(TObject *Sender);
         void __fastcall btnAfisErrClick(TObject *Sender);
         void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
@@ -72,6 +76,7 @@ __published:	// IDE-managed Components
         void __fastcall ASAbttnClick(TObject *Sender);
         void __fastcall PIPbttnClick(TObject *Sender);
         void __fastcall AIAbttnClick(TObject *Sender);
+        void __fastcall AIAvaluebttnClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TFMain(TComponent* Owner);
