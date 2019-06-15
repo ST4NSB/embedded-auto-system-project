@@ -8,11 +8,6 @@
 #ifndef COMENZI_H_
 #define COMENZI_H_
 
-#define P_ID 0
-#define P_SIZE 1
-#define P_DATA 2
-#define P_CHECKSUM 3
-
 #define SPS 1
 #define SOS 2
 #define SPD 3
