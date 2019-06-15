@@ -17,13 +17,21 @@ struct package {
 * ```pack.checksum``` este calculat ca suma valorilor hex din: ```pack.ID```, ```pack.size```, ```pack.data[..]``` 
 
 ## Comenzi
-### 1. Semnalizare 
+### SEMNALIZARE 
 * **SPS** Pornire stanga  
 * **SOS** Oprire stanga  
 * **SPD** Pornire dreapta  
 * **SOD** Oprire dreapta  
 * **SPA** Pornire avarie  
-* **SOA** Oprire avarie
+* **SOA** Oprire avarie  
+
+### ACCELERATIE
+* **AIA** Impunere acceleratie
+* **ACA** Crestere acceleratie
+* **ASA** Scadere acceleratie  
+
+### PARAMETRII
+* **PIP** Interogare parametrii -> raspuns cu **PRI**
 
 ## Exemple
 ### Definitii ID comenzi
