@@ -2,18 +2,9 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "comenzi.h"
 #include "stari.h"
+#include "package.h"
 
-#define P_ID 0
-#define P_SIZE 1
-#define P_DATA 2
-#define P_CHECKSUM 3
-
-struct package {
-	unsigned char ID;
-	unsigned char size;
-	unsigned char data[5];
-	unsigned char checksum;
-}pack;
+struct package pack;
 
 struct stransition {
 	unsigned char state;
@@ -29,7 +20,7 @@ struct stransition strans[14] = {
 	{SS, SOS, DEFAULT, 0, 0},
 	{SS, SPA, SSAV, 1, 1},
 	{SD, SOD, DEFAULT, 0, 0},
-	{SD, SPA, SDAV, 0, 1},
+	{SD, SPA, SDAV, 1, 1},
 	{AV, SPS, SSAV, 1, 1},
 	{AV, SOA, DEFAULT, 0, 0},
 	{AV, SPD, SDAV, 1, 1},
@@ -39,17 +30,21 @@ struct stransition strans[14] = {
 	{SDAV, SOD, AV, 1, 1}
 };
 
-unsigned char cmp_address = 0, data_adress = 0; // fost int
 unsigned char current_state = DEFAULT; // fost int
 
 unsigned char caracter_receptionat;        // caracterul receptionat pe intrerupere   
 unsigned char numarare_timer;
 unsigned char semnalizare_stanga, semnalizare_dreapta;
+unsigned char cmp_address = 0, data_adress = 0; // fost int
+
+unsigned char acc_level = 0;
 
 unsigned char fanion_timer            = 0;  // avem de tratat un eveniment de timer 
 unsigned char fanion_receptie         = 0;  // avem de tratat un eveniment de receptie caracter 
 unsigned char validare_ecou           = 0;     // validare transmitere in ecou a caracterului primit 
 unsigned char validare_stare_automata = 0;    // validare tramsnmitere automata a starii
+
+unsigned char data_acceleratie = 0;
 
 
 
@@ -80,7 +75,14 @@ void Init(){
 }
 
 void cautare_comanda(unsigned char comanda) {
+	
+	// tratare comenzi 1-6
+	unsigned char val_acceleratie = 25;
 	int i;
+	
+	// cazu cand data_acc = 0
+	PTFD &= 0x81;
+
 	for(i = 0; i < (sizeof(strans)/sizeof(strans[0])); i++) {
 		if((strans[i].state == current_state) && (strans[i].cmd == comanda)) {
 			current_state = strans[i].new_state;
@@ -89,136 +91,54 @@ void cautare_comanda(unsigned char comanda) {
 			break;
 		}
 	}
+	
+	if(comanda == ACA) {
+		if(data_acceleratie + val_acceleratie > 255)
+			data_acceleratie = 255;
+		else data_acceleratie += val_acceleratie;
+	}
+		
+	if(comanda == ASA) {
+		if(data_acceleratie - val_acceleratie < 1)
+			data_acceleratie = 0;
+		else data_acceleratie -= val_acceleratie;
+	}
+	
+	if(comanda == AIA) {
+		data_acceleratie = pack.data[0];
+	}
+	
+	if(comanda == PIP) {
+		unsigned char sum = 0x00;
+		unsigned char pip_size = 0x01;
+		sum = (unsigned char)PRI + pip_size + data_acceleratie;
+		while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie 
+		SCI1D = PRI;
+		while(!(SCI1S1 & 0x80));
+		SCI1D = pip_size;
+		while(!(SCI1S1 & 0x80));
+		SCI1D = data_acceleratie;
+		while(!(SCI1S1 & 0x80));
+		SCI1D = sum;
+	}
+
+	 if(data_acceleratie >= 1 && data_acceleratie <= 51)
+	    	PTFD |= 0x40;	
+	 else if(data_acceleratie >= 52 && data_acceleratie <= 102)
+	    	PTFD |= 0x60;
+	 else if(data_acceleratie >= 103 && data_acceleratie <= 153)
+	    	PTFD |= 0x70;
+	 else if(data_acceleratie >= 154 && data_acceleratie <= 204)
+	    	PTFD |= 0x78;
+	 else if(data_acceleratie >= 205 && data_acceleratie <= 254)
+	    	PTFD |= 0x7c;
+	 else if(data_acceleratie == 255)
+	    	PTFD |= 0x7e;
 }
-
- 
-//rutina intrerupere Receptie seriala
-interrupt 17 void SCI1_receive()
-{
-    unsigned char rc, sci1d_copy;
-    unsigned char sum = 0x00;
-    int i;
-    rc = SCI1S1;
-    sci1d_copy = SCI1D;
-    
-    
-    switch(cmp_address) {
-        case P_ID: 
-            pack.ID = sci1d_copy;
-            cmp_address = P_SIZE;
-            break;
-        case P_SIZE: 
-            pack.size = sci1d_copy;
-            if(pack.size == 0)
-                cmp_address = P_CHECKSUM;
-            else cmp_address = P_DATA;
-            data_adress = 0;
-            break;
-        case P_DATA: 
-            pack.data[data_adress] = sci1d_copy;
-            data_adress++;
-            if(data_adress == pack.size)
-                cmp_address = P_CHECKSUM;
-            break;
-        case P_CHECKSUM:
-            pack.checksum = sci1d_copy;
-            sum = pack.ID;
-            sum += pack.size;
-            for(i = 0; i < data_adress; i++)
-                sum += pack.data[i];
-            if(sum == pack.checksum) {
-                fanion_receptie = 1;
-            }
-            cmp_address = P_ID;
-            break;
-    }
-    //caracter_receptionat = SCI1D;
-    //fanion_receptie = 1;
- 
-}
-
-//rutina intrerupere Timer 1
-interrupt 11 void TPM1_timerInt()
-{
-    byte  varTOF;
-    varTOF = TPM1SC;    // clear TOF; first read and then write 0 to the flag
-    TPM1SC &= 0x7F;
-    
-    if(numarare_timer == 0) {
-    	if(semnalizare_stanga == 1) 
-    	    PTFD |= 0x80;
-    	if(semnalizare_dreapta == 1)
-    	    PTFD |= 0x01;
-    }
-
-    if(numarare_timer == 3)
-    	PTFD &= 0x7E;
-    	
-    if(numarare_timer == 4)
-        fanion_timer = 1;
-    
-    
-    numarare_timer++;
-    numarare_timer %= 5;
-}  
-
 
 void tratare_seriala() {
     caracter_receptionat = pack.ID;
     cautare_comanda(caracter_receptionat);
-    
-    /*
-    switch(caracter_receptionat) {
-      case SPS: semnalizare_stanga = 1; break;
-      case SOS: semnalizare_stanga = 0; break;
-      case SPD: semnalizare_dreapta = 1; break;
-      case SOD: semnalizare_dreapta = 0; break;
-      case SPA: semnalizare_stanga = 1; 
-      	  	  	semnalizare_dreapta = 1;
-      	  	  	break;
-      case SOA: semnalizare_stanga = 0;
-      	  	  	semnalizare_dreapta = 0;
-      	  	  	break;
-     */
-     /*
-      case '0':
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7': PTFD = 0x01 << (caracter_receptionat - '0'); break;
-      
-      case '8': PTFD = 0xff;break;
-      case '9': PTFD = 0x0;break;
-      
-      case 'p':
-      case 'P': validare_ecou = 1; break;
-      case 'o':
-      case 'O': validare_ecou = 0; break;
-      
-      case 'b':
-      case 'B': validare_stare_automata = 1; break;
-      case 'e':
-      case 'E': validare_stare_automata = 0; break;
-      
-      case 's':
-      case 'S':
-               while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie  - verific daca pot sa transmit
-                   if( (PTCD & 0x04) == 0x04) 
-                       SCI1D = 'L';
-                   else
-                       SCI1D = 'A';
-               break;         
-      default:  
-            if (validare_ecou) {
-              
-               while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie  - verific daca pot sa transmit
-               SCI1D = caracter_receptionat;
-            }
-     }
-     */
  }
 
 void tratare_timer()
@@ -247,5 +167,4 @@ void main(void) {
   } /* loop forever */
   /* please make sure that you never leave main */
 }
-
 
