@@ -19,7 +19,8 @@ struct package {
 * ```pack.checksum``` este calculat ca suma valorilor hex din: ```pack.ID```, ```pack.size```, ```pack.data[..]``` 
 
 ### FSM semnalizari
-Semnalizarile folosesc **finite state machine** care defineste functionarea acestora
+Semnalizarile folosesc **finite state machine** care definesc functionarea acestora  
+![fsm](fsm.png)
 
 ## Comenzi
 #### SEMNALIZARE 
