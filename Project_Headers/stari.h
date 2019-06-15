@@ -1,3 +1,10 @@
+/*
+ * stari.h
+ *
+ *  Created on: May 22, 2019
+ *      Author: Student
+ */
+
 #ifndef STARI_H_
 #define STARI_H_
 
