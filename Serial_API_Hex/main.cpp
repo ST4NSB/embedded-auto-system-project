@@ -247,7 +247,7 @@ void __fastcall TFMain::AIAvaluebttnClick(TObject *Sender)
 void __fastcall TFMain::AIAbttnClick(TObject *Sender)
 {
         Randomize();
-        unsigned char rand = (RandSeed % 256); // interval 0-255
+        unsigned char rand = RandSeed % 256; // interval 0-255
         buffAIA[0] = AIA;
         buffAIA[1] = 01;
         buffAIA[2] = rand;
