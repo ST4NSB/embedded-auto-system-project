@@ -77,7 +77,9 @@ struct stransition strans[14] = {
 * **ACA** Crestere acceleratie
 * **ASA** Scadere acceleratie  
 #### PARAMETRII
-* **PIP** Interogare parametrii -> raspuns cu **PRI**
+* **PIP** Interogare parametrii -> raspuns la interogare cu **PRI**
+* **PPTA** Pornire trimitere automata -> raspuns automat cu **PRA**
+* **POTA** Oprire trimitere automata 
 
 ### Informatii
 ```c
@@ -112,20 +114,37 @@ else if(data_acceleratie == 255)
    PTFD |= 0x7e;
 ```
 * pt. comenzile de tip **ACA** si **ASA**, ```data_acceleratie``` va creste/scadea cu o valoare ```val_acceleratie``` impusa 
-* **Parametrii** detine o singura comanda **PIP** care va interoga parametrii placii prin tratarea seriala iar acestia vor fi transmisi inapoi spre PC tot printr-un raspuns de tip ACK **PRI**, un ```data.size``` de parametrii, cativa ```data.params[..]``` precum valoarea 
+
+* **Parametrii** detine 3 comenzi **PRI**, **PPTA**, **POTA**, daca executam **PRI** se va apela functia ```void TrimitereParam(unsigned char cmd)``` cu raspuns de tip **PRI**, daca executam **PPTA** se va apela 40% dintr-o secunda functia ```void TrimitereParam(unsigned char cmd)``` cu raspuns de tip **PRA** iar daca executam **PPTA** vom opri executia apelului functiei setata de **PPTA**   
+
+```c
+void TrimitereParam(unsigned char cmd)
+``` 
+* Functia interogheaza parametrii placii prin tratarea seriala iar acestia vor fi transmisi inapoi spre PC tot printr-un raspuns de tip ACK cmd, un ```data.size``` de parametrii, cativa ```data.params[..]``` precum valoarea 
 ```data_acceleratie```, starea usilor(cele 4 switch-uri), starea semnalizarilor, starea celor 8 switch-uri si inca un octet 
 ```data.checksum``` care va reprezenta suma octetilor transmisi anterior de **PRI**
+
 ```c
-if(comanda == PIP) {
+void TrimitereParam(unsigned char cmd) {
    unsigned char sum = 0x00;
-   unsigned char pip_size = 0x01;
-   sum = (unsigned char)PRI + pip_size + data_acceleratie;
+   unsigned char pip_size = 0x04;
+   unsigned char sw1_4 = 0x00;
+   sw1_4 = ((PTCD & 0x04) >> 2) | ((PTCD & 0x40) >> 5) | ((PTDD & 0x08) >> 1) | ((PTDD & 0x04) << 1);
+   sw1_4 = sw1_4 ^ 0x0f;
+   sum = cmd + pip_size;
+   sum += data_acceleratie + sw1_4 + current_state + PTAD;
    while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie 
-   SCI1D = PRI;
+   SCI1D = cmd;
    while(!(SCI1S1 & 0x80));
    SCI1D = pip_size;
    while(!(SCI1S1 & 0x80));
    SCI1D = data_acceleratie;
+   while(!(SCI1S1 & 0x80));
+   SCI1D = sw1_4;
+   while(!(SCI1S1 & 0x80));
+   SCI1D = current_state;
+   while(!(SCI1S1 & 0x80));
+   SCI1D = PTAD;
    while(!(SCI1S1 & 0x80));
    SCI1D = sum;
 }
@@ -145,6 +164,9 @@ if(comanda == PIP) {
 #define ASA 9
 #define PIP 10
 #define PRI 11 // (raspuns la PIP)
+#define PRA 12 // (raspuns la PPTA)
+#define PPTA 13
+#define POTA 14
 ```
 
 ### Exemple pachete de date
