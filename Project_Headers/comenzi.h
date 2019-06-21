@@ -21,5 +21,10 @@
 
 #define PIP 10
 #define PRI 11
+#define PRA 12
+
+#define PPTA 13
+#define POTA 14
+
 
 #endif /* COMENZI_H_ */

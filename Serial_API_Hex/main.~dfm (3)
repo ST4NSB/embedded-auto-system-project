@@ -1,8 +1,8 @@
 object FMain: TFMain
-  Left = 207
-  Top = 258
-  Width = 704
-  Height = 540
+  Left = 214
+  Top = 281
+  Width = 1035
+  Height = 662
   Caption = 'FMain'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -265,5 +265,77 @@ object FMain: TFMain
     Caption = 'Sterge buffer transmisie'
     TabOrder = 15
     OnClick = btnStergereTClick
+  end
+  object SPSbttn: TButton
+    Left = 760
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = 'SPSbttn'
+    TabOrder = 16
+    OnClick = SPSbttnClick
+  end
+  object SOSbttn: TButton
+    Left = 864
+    Top = 72
+    Width = 75
+    Height = 25
+    Caption = 'SOSbttn'
+    TabOrder = 17
+    OnClick = SOSbttnClick
+  end
+  object SPDbttn: TButton
+    Left = 760
+    Top = 112
+    Width = 75
+    Height = 25
+    Caption = 'SPDbttn'
+    TabOrder = 18
+    OnClick = SPDbttnClick
+  end
+  object SODbttn: TButton
+    Left = 864
+    Top = 112
+    Width = 75
+    Height = 25
+    Caption = 'SODbttn'
+    TabOrder = 19
+    OnClick = SODbttnClick
+  end
+  object SPAbttn: TButton
+    Left = 760
+    Top = 160
+    Width = 75
+    Height = 25
+    Caption = 'SPAbttn'
+    TabOrder = 20
+    OnClick = SPAbttnClick
+  end
+  object SOAbttn: TButton
+    Left = 864
+    Top = 160
+    Width = 75
+    Height = 25
+    Caption = 'SOAbttn'
+    TabOrder = 21
+    OnClick = SOAbttnClick
+  end
+  object ACAbttn: TButton
+    Left = 760
+    Top = 264
+    Width = 75
+    Height = 25
+    Caption = 'ACAbttn'
+    TabOrder = 22
+    OnClick = ACAbttnClick
+  end
+  object ASAbttn: TButton
+    Left = 864
+    Top = 264
+    Width = 75
+    Height = 25
+    Caption = 'ASAbttn'
+    TabOrder = 23
+    OnClick = ASAbttnClick
   end
 end

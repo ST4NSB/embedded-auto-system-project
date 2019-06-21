@@ -79,8 +79,6 @@ __published:	// IDE-managed Components
         void __fastcall PIPbttnClick(TObject *Sender);
         void __fastcall AIAbttnClick(TObject *Sender);
         void __fastcall AIAvaluebttnClick(TObject *Sender);
-        void __fastcall PPTAbttnClick(TObject *Sender);
-        void __fastcall POTAbttnClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TFMain(TComponent* Owner);

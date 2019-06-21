@@ -7,9 +7,6 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-
-
-
 TFMain *FMain;
 
 extern unsigned char rdbuff[];
@@ -95,8 +92,8 @@ void __fastcall TFMain::FormClose(TObject *Sender, TCloseAction &Action)
 
 void __fastcall TFMain::btnSendTextClick(TObject *Sender)
 {
-        DWORD nr=0;
-        OVERLAPPED ovlw;
+DWORD nr=0;
+OVERLAPPED ovlw;
 
           ovlw.hEvent=CreateEvent(NULL,TRUE,TRUE,NULL);
           if(!WriteFile(m_hCommPort, rtbuff, rtindex, &nr, &ovlw))
@@ -158,121 +155,4 @@ char v;
         rtindex++;
 }
 //---------------------------------------------------------------------------
-void TrimitePachet(unsigned char buff[], int n)
-{
-        DWORD nr=0;
-        OVERLAPPED ovlw;
-
-        ovlw.hEvent=CreateEvent(NULL,TRUE,TRUE,NULL);
-        if(!WriteFile(m_hCommPort, buff, n, &nr, &ovlw))
-            if(GetLastError()!= ERROR_IO_PENDING)
-              ShowMessage("WriteText: "+IntToStr(GetLastError()));
-        //eValueA->SetFocus();
-}
-
-#define SPS 1
-#define SOS 2
-#define SPD 3
-#define SOD 4
-#define SPA 5
-#define SOA 6
-
-#define AIA 7
-#define ACA 8
-#define ASA 9
-
-#define PIP 10
-
-unsigned char buffSPS[] = {SPS, 00, SPS};
-unsigned char buffSOS[] = {SOS, 00, SOS};
-unsigned char buffSPD[] = {SPD, 00, SPD};
-unsigned char buffSOD[] = {SOD, 00, SOD};
-unsigned char buffSPA[] = {SPA, 00, SPA};
-unsigned char buffSOA[] = {SOA, 00, SOA};
-
-unsigned char buffAIA[4];
-unsigned char buffACA[] = {ACA, 00, ACA};
-unsigned char buffASA[] = {ASA, 00, ASA};
-
-unsigned char buffPIP[] = {PIP, 00, PIP};
-
-void __fastcall TFMain::SPSbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSPS, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::SOSbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSOS, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::SPDbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSPD, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::SODbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSOD, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::SPAbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSPA, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::SOAbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffSOA, 3);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::AIAvaluebttnClick(TObject *Sender)
-{
-        unsigned char value = AIAtxtbox->Text.ToInt();
-        buffAIA[0] = AIA;
-        buffAIA[1] = 01;
-        buffAIA[2] = value;
-        unsigned char sum = buffAIA[0] + buffAIA[1] + buffAIA[2];
-        buffAIA[3] = sum;
-        TrimitePachet(buffAIA, 4);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::AIAbttnClick(TObject *Sender)
-{
-        Randomize();
-        unsigned char rand = (RandSeed % 255) + 1; // interval 1-255
-        buffAIA[0] = AIA;
-        buffAIA[1] = 01;
-        buffAIA[2] = rand;
-        unsigned char sum = buffAIA[0] + buffAIA[1] + buffAIA[2];
-        buffAIA[3] = sum;
-        TrimitePachet(buffAIA, 4);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::ACAbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffACA, 3);        
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::ASAbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffASA, 3);        
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TFMain::PIPbttnClick(TObject *Sender)
-{
-        TrimitePachet(buffPIP, 3);
-}
-//---------------------------------------------------------------------------
-
 

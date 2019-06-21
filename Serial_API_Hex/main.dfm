@@ -95,7 +95,7 @@ object FMain: TFMain
   end
   object Semnalizare: TLabel
     Left = 800
-    Top = 48
+    Top = 32
     Width = 88
     Height = 20
     Caption = 'Semnalizare'
@@ -108,7 +108,7 @@ object FMain: TFMain
   end
   object Acceleratie: TLabel
     Left = 800
-    Top = 200
+    Top = 184
     Width = 79
     Height = 20
     Caption = 'Acceleratie'
@@ -121,7 +121,7 @@ object FMain: TFMain
   end
   object Parametrii: TLabel
     Left = 800
-    Top = 424
+    Top = 408
     Width = 71
     Height = 20
     Caption = 'Parametrii'
@@ -140,7 +140,7 @@ object FMain: TFMain
   end
   object accinfo: TLabel
     Left = 800
-    Top = 232
+    Top = 216
     Width = 167
     Height = 13
     Caption = 'Introduceti o valoare pt. acceleratie'
@@ -153,7 +153,7 @@ object FMain: TFMain
   end
   object accinfo2: TLabel
     Left = 800
-    Top = 248
+    Top = 232
     Width = 56
     Height = 13
     Caption = 'intre (0-255)'
@@ -339,7 +339,7 @@ object FMain: TFMain
   end
   object SPSbttn: TButton
     Left = 800
-    Top = 80
+    Top = 64
     Width = 75
     Height = 25
     Caption = 'SPS'
@@ -348,7 +348,7 @@ object FMain: TFMain
   end
   object SOSbttn: TButton
     Left = 888
-    Top = 80
+    Top = 64
     Width = 75
     Height = 25
     Caption = 'SOS'
@@ -357,7 +357,7 @@ object FMain: TFMain
   end
   object SPDbttn: TButton
     Left = 800
-    Top = 120
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'SPD'
@@ -366,7 +366,7 @@ object FMain: TFMain
   end
   object SODbttn: TButton
     Left = 888
-    Top = 120
+    Top = 104
     Width = 75
     Height = 25
     Caption = 'SOD'
@@ -375,7 +375,7 @@ object FMain: TFMain
   end
   object SPAbttn: TButton
     Left = 800
-    Top = 160
+    Top = 144
     Width = 75
     Height = 25
     Caption = 'SPA'
@@ -384,7 +384,7 @@ object FMain: TFMain
   end
   object SOAbttn: TButton
     Left = 888
-    Top = 160
+    Top = 144
     Width = 75
     Height = 25
     Caption = 'SOA'
@@ -393,7 +393,7 @@ object FMain: TFMain
   end
   object ACAbttn: TButton
     Left = 800
-    Top = 384
+    Top = 368
     Width = 75
     Height = 25
     Caption = 'ACA'
@@ -402,7 +402,7 @@ object FMain: TFMain
   end
   object ASAbttn: TButton
     Left = 888
-    Top = 384
+    Top = 368
     Width = 75
     Height = 25
     Caption = 'ASA'
@@ -411,7 +411,7 @@ object FMain: TFMain
   end
   object PIPbttn: TButton
     Left = 800
-    Top = 456
+    Top = 440
     Width = 75
     Height = 25
     Caption = 'PIP'
@@ -420,7 +420,7 @@ object FMain: TFMain
   end
   object AIAbttn: TBitBtn
     Left = 800
-    Top = 344
+    Top = 328
     Width = 161
     Height = 25
     Caption = 'AIA (valoare random)'
@@ -429,7 +429,7 @@ object FMain: TFMain
   end
   object AIAtxtbox: TEdit
     Left = 800
-    Top = 272
+    Top = 256
     Width = 161
     Height = 21
     TabOrder = 26
@@ -437,11 +437,29 @@ object FMain: TFMain
   end
   object AIAvaluebttn: TButton
     Left = 800
-    Top = 304
+    Top = 288
     Width = 75
     Height = 25
     Caption = 'AIA'
     TabOrder = 27
     OnClick = AIAvaluebttnClick
+  end
+  object PPTAbttn: TButton
+    Left = 800
+    Top = 480
+    Width = 75
+    Height = 25
+    Caption = 'PPTA'
+    TabOrder = 28
+    OnClick = PPTAbttnClick
+  end
+  object POTAbttn: TButton
+    Left = 888
+    Top = 480
+    Width = 75
+    Height = 25
+    Caption = 'POTA'
+    TabOrder = 29
+    OnClick = POTAbttnClick
   end
 end

@@ -42,7 +42,8 @@ unsigned char acc_level = 0;
 unsigned char fanion_timer            = 0;  // avem de tratat un eveniment de timer 
 unsigned char fanion_receptie         = 0;  // avem de tratat un eveniment de receptie caracter 
 unsigned char validare_ecou           = 0;     // validare transmitere in ecou a caracterului primit 
-unsigned char validare_stare_automata = 0;    // validare tramsnmitere automata a starii
+unsigned char validare_trimitere_auto = 0;    // validare tramsnmitere automata a starii
+
 
 unsigned char data_acceleratie = 0;
 
@@ -58,9 +59,17 @@ void Init(){
     // configurare PORT F
     PTFDD = 0xFF;     // set port f as outputs for LED operation
     
+    //configurare PORT A
+    PTADD = 0x00; // cele 8 switch-uri
+    PTAPE = 0xFF;
+   
     //configurare PORT C
     PTCDD = ~0x44; // SW1 si SW2 pentru intrare
     PTCPE = 0x44;
+    
+    //configurare PORT D
+    PTDDD = ~0x0C; // SW3 si SW4 pentru intrare
+    PTDPE = 0x0c;
    
      //configurare timer 1 - 1s
     TPM1SC = 0x4F;    
@@ -72,6 +81,31 @@ void Init(){
     SCI1BD = 8000000/16/19200;
     SCI1C1 = 0;
     SCI1C2 = 0x2C; //validare transmisie prin interogare si receptie prin intrerupere
+}
+
+void TrimitereParam(unsigned char cmd)
+{
+	unsigned char sum = 0x00;
+	unsigned char pip_size = 0x04;
+	unsigned char sw1_4 = 0x00;
+	sw1_4 = ((PTCD & 0x04) >> 2) | ((PTCD & 0x40) >> 5) | ((PTDD & 0x08) >> 1) | ((PTDD & 0x04) << 1);
+	sw1_4 = sw1_4 ^ 0x0f;
+	sum = cmd + pip_size;
+	sum += data_acceleratie + sw1_4 + current_state + PTAD;
+	while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie 
+	SCI1D = cmd;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = pip_size;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = data_acceleratie;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = sw1_4;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = current_state;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = PTAD;
+	while(!(SCI1S1 & 0x80));
+	SCI1D = sum;
 }
 
 void cautare_comanda(unsigned char comanda) {
@@ -109,18 +143,14 @@ void cautare_comanda(unsigned char comanda) {
 	}
 	
 	if(comanda == PIP) {
-		unsigned char sum = 0x00;
-		unsigned char pip_size = 0x01;
-		sum = (unsigned char)PRI + pip_size + data_acceleratie;
-		while(!(SCI1S1 & 0x80)); //asteptam terminare transmisie 
-		SCI1D = PRI;
-		while(!(SCI1S1 & 0x80));
-		SCI1D = pip_size;
-		while(!(SCI1S1 & 0x80));
-		SCI1D = data_acceleratie;
-		while(!(SCI1S1 & 0x80));
-		SCI1D = sum;
+		TrimitereParam(PRI);
 	}
+	
+	if(comanda == PPTA)
+		validare_trimitere_auto = 1;
+	
+	if(comanda == POTA)
+		validare_trimitere_auto = 0;
 
 	 if(data_acceleratie >= 1 && data_acceleratie <= 51)
 	    	PTFD |= 0x40;	
@@ -143,7 +173,8 @@ void tratare_seriala() {
 
 void tratare_timer()
 {
-	
+	if(validare_trimitere_auto == 1)
+		TrimitereParam(PRA);
 }
 
 void main(void) {
