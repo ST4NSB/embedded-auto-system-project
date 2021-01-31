@@ -1,4 +1,4 @@
-# Automotive Main-Board System Simulation (Ro)
+# Automotive main-board system simulation (Ro)
 HCS08 Microcontrollers Family, MC9S08AW60 Series
 
 ## Structuri
